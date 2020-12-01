@@ -2,20 +2,17 @@
   "name": "twit",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "dependencies": {
     "puppeteer": "^5.5.0",
     "puppeteer-cluster": "^0.22.0"
   },
   "devDependencies": {
-    "@types/puppeteer": "^5.4.0",
-    "typescript": "^4.1.2",
     "watch": "^1.0.2"
   },
   "scripts": {
-    "start": "npm run build && node ./dist/main.js",
-    "dev": "watch 'npm run build && npm run start'",
-    "build": "tsc --build ./tsconfig.json"
+    "start": "node main.js",
+    "dev": "watch 'npm run start'"
   },
   "repository": {
     "type": "git",

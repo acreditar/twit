@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer')
-const { Cluster } = require('puppeteer-cluster')
+// const { Cluster } = require('puppeteer-cluster')
 
 const path = require('path')
 const usernames = require('./usernames')
@@ -19,16 +19,16 @@ async function catchAvaliableUsername(page, username) {
 
 async function main() {
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     userDataDir: path.join(__dirname, 'chomium_data/')
-  });
+  })
   
-  const page = await browser.newPage();
+  const page = await browser.newPage()
 
   const _ = await catchAvaliableUsername(page, usernames[0])
   console.log(_)
 
-  await browser.close();
+  await browser.close()
 }
 
-main();
+main()
