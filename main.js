@@ -2,12 +2,10 @@ const puppeteer = require('puppeteer');
 const usernames = require('./usernames');
 const path = require('path')
 
-function has_content() {
+function profile_doesnt_exists(url) {
     return true
 }
-/**
- * @param { string } username 
- */
+
 function catchAvaliableUsername(page, username) {
   page.goto(`https://twitter.com/${username}`)
   return;
