@@ -1,55 +1,27 @@
-const puppeteer = require("puppeteer")
-const data = require('./names.json');
+const puppeteer = require('puppeteer');
+const usernames = require('./usernames');
+const path = require('path')
+
+function has_content() {
+    return true
+}
+/**
+ * @param { string } username 
+ */
+function catchAvaliableUsername(page, username) {
+  page.goto(`https://twitter.com/${username}`)
+  return;
+}
 
 async function main() {
-    const browser = await puppeteer.launch({
-        headless: false
-    });
+  const browser = await puppeteer.launch({
+    headless: false,
+    userDataDir: path.join(__dirname, 'chomium_data/')
+  });
+  const page = await browser.newPage();
 
-
-    const page = await browser.newPage();
-    for (username in data) {
-        await page.goto(`https://twitter.com/${data[username]}`)
-
-        await Promise.race([
-            page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
-            page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
-        ]);
-
-        const element = await Promise.race([
-            page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
-            page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
-        ]);
-
-        const value = await page.evaluate(el => el.innerText, element[0]);
-
-        console.log(value);
-
-
-    }
-
-    // console.log(`https://twitter.com/along`)
-    // await page.goto(`https://twitter.com/dsajouid`)
-
-
-
-
-    //console.log(username)
-
-
-
-    // await Promise.race([
-    //     page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
-    //     page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
-    // ]);
-
-    // const element = await Promise.race([
-    //     page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
-    //     page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
-    // ]);
-
-    // const value = await page.evaluate(el => el.innerText, element[0]);
-
-    // console.log(value);
+  await browser.close();
+  usernames.map(username => catchAvaliableUsername(page, username))
 }
+
 main();

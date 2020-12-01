@@ -1,16 +1,21 @@
 {
-  "name": "injs",
+  "name": "twit",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "fs": "^0.0.1-security",
     "puppeteer": "^5.5.0",
     "puppeteer-cluster": "^0.22.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/puppeteer": "^5.4.0",
+    "typescript": "^4.1.2",
+    "watch": "^1.0.2"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npm run build && node ./dist/main.js",
+    "dev": "watch 'npm run build && npm run start'",
+    "build": "tsc --build ./tsconfig.json"
   },
   "repository": {
     "type": "git",
