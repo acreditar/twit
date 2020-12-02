@@ -1,34 +1,55 @@
-const puppeteer = require('puppeteer')
-// const { Cluster } = require('puppeteer-cluster')
-
-const path = require('path')
-const usernames = require('./usernames')
-
-const SELECTOR = '#react-root > div > div > div.css-1dbjc4n.r-18u37iz.r-13qz1uu.r-417010 > main > div > div > div > div > div > div:nth-child(2) > div > div > div.css-1dbjc4n.r-14lw9ot.r-mxfbl1.r-1efd50x.r-5kkj8d.r-d9fdf6.r-6wcr4z > div.css-901oao.r-18jsvk2.r-1qd0xha.r-1b6yd1w.r-b88u0q.r-ad9z0x.r-15d164r.r-bcqeeo.r-q4m81j.r-qvutc0 > span'
-
-async function catchAvaliableUsername(page, username) {
-  await page.goto(`https://twitter.com/${username}`)
-
-  try {
-    return await page.$eval(SELECTOR, element => element.innerHTML)
-  }
-  catch (e) {
-    console.log(e)
-  }
-}
+const puppeteer = require("puppeteer")
+const data = require('./names.json');
 
 async function main() {
-  const browser = await puppeteer.launch({
-    headless: false,
-    userDataDir: path.join(__dirname, 'chomium_data/')
-  })
-  
-  const page = await browser.newPage()
+    const browser = await puppeteer.launch({
+        headless: false
+    });
 
-  const _ = await catchAvaliableUsername(page, usernames[0])
-  console.log(_)
 
-  await browser.close()
+    const page = await browser.newPage();
+    for (username in data) {
+        await page.goto(`https://twitter.com/${data[username]}`)
+
+        await Promise.race([
+            page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
+            page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
+        ]);
+
+        const element = await Promise.race([
+            page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
+            page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
+        ]);
+
+        const value = await page.evaluate(el => el.innerText, element[0]);
+
+        console.log(value);
+
+
+    }
+
+    // console.log(`https://twitter.com/along`)
+    // await page.goto(`https://twitter.com/dsajouid`)
+
+
+
+
+    //console.log(username)
+
+
+
+    // await Promise.race([
+    //     page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
+    //     page.waitForXPath(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
+    // ]);
+
+    // const element = await Promise.race([
+    //     page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div/div/div/div[2]/div[1]/span`),
+    //     page.$x(`//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div/div/div[2]/div/div/div[2]/div[1]/span`)
+    // ]);
+
+    // const value = await page.evaluate(el => el.innerText, element[0]);
+
+    // console.log(value);
 }
-
-main()
+main();

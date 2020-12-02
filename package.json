@@ -1,18 +1,16 @@
 {
-  "name": "twit",
+  "name": "injs",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "index.js",
   "dependencies": {
+    "fs": "^0.0.1-security",
     "puppeteer": "^5.5.0",
     "puppeteer-cluster": "^0.22.0"
   },
-  "devDependencies": {
-    "watch": "^1.0.2"
-  },
+  "devDependencies": {},
   "scripts": {
-    "start": "node main.js",
-    "dev": "watch 'npm run start'"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
